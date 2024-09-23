@@ -1,0 +1,37 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "1_C0V3n",
+	"author": "Parker W",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"clean-windows": "if exist dist rd /s /q dist",
+		"clean-linux": "rm -rf dist",
+		"build": "pnpm run clean-linux && tsc",
+		"check": "prettier --check . && eslint --ext .ts --format=pretty src",
+		"deploy": "pnpm run build && node dist/deploy.js",
+		"fix": "prettier --write . && eslint --ext .ts --fix --format=pretty src",
+		"start": "node dist/index.js",
+		"dev": "pnpm run build && node dist/index.js",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@discordjs/core": "^1.2.0",
+		"better-sqlite3": "^11.3.0",
+		"discord.js": "^14.16.0"
+	},
+	"devDependencies": {
+		"@sapphire/ts-config": "^5.0.1",
+		"@types/better-sqlite3": "^7.6.11",
+		"@types/node": "^18.19.45",
+		"eslint": "^8.57.0",
+		"eslint-config-neon": "^0.1.62",
+		"eslint-formatter-pretty": "^6.0.1",
+		"husky": "^9.1.6",
+		"lint-staged": "^15.2.10",
+		"prettier": "^3.3.3",
+		"typescript": "~5.5.4",
+		"zod": "^3.23.8"
+	}
+}
