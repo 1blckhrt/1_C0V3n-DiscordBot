@@ -14,4 +14,20 @@ export default async function setupDBTables() {
             message TEXT
         );
     `);
+
+	client.db.exec(`
+        CREATE TABLE IF NOT EXISTS sotd_queue (
+            name TEXT,
+            artist TEXT,
+            url TEXT
+        );
+    `);
+
+	client.db.exec(`
+        CREATE TABLE IF NOT EXISTS sotd (
+            channel_id TEXT,
+            message TEXT,
+            role_id TEXT
+        );
+    `);
 }

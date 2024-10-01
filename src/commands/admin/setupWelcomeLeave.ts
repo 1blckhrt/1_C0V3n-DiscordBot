@@ -5,7 +5,7 @@ import type { Command } from "../../util/types/command.js";
 export default {
 	data: {
 		name: "join_leave",
-		description: "Sets up or removes the welcome/leave message.",
+		description: "Sets up or removes the welcome/leave system.",
 		dm_permission: false,
 		default_member_permissions: PermissionFlagsBits.Administrator.toString(),
 		options: [
