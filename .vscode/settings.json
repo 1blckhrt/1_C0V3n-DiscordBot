@@ -10,5 +10,5 @@
 	"files.insertFinalNewline": true,
 	"files.eol": "\n",
 	"npm.packageManager": "pnpm",
-	"editor.fontFamily": "JetBrains Mono NL"
+	"editor.fontFamily": "JetBrainsMono Nerd Font"
 }

@@ -36,7 +36,7 @@ export default {
 					{
 						name: "remove",
 						description: "Removes the welcome message.",
-						type: 1,
+						type: ApplicationCommandOptionType.Subcommand,
 					},
 				],
 			},

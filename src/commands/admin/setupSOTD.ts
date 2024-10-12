@@ -41,7 +41,6 @@ export default {
 			client.db.prepare("DELETE FROM sotd WHERE channel_id = ?").run(channel?.id);
 		}
 
-		// Set up the channel
 		client.db
 			.prepare("INSERT INTO sotd (channel_id, message, role_id) VALUES (?, ?, ?)")
 			.run(channel?.id, message, role?.id);

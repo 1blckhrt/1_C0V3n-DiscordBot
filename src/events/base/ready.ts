@@ -1,6 +1,6 @@
-import { Events } from 'discord.js';
-import UserStatus from '../../util/enums/status.js';
-import type { Event } from '../../util/types/event.js';
+import { Events } from "discord.js";
+import UserStatus from "../../util/enums/status.js";
+import type { Event } from "../../util/types/event.js";
 
 export default {
 	name: Events.ClientReady,
