@@ -1,7 +1,7 @@
 import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
-import { client } from "../../../util/constants.js";
-import EmbedColor from "../../../util/enums/embedColor.js";
-import type { Command } from "../../../util/types/command.js";
+import { client } from "../../util/constants.js";
+import EmbedColor from "../../util/enums/embedColor.js";
+import type { Command } from "../../util/types/command.js";
 
 export default {
 	data: {
