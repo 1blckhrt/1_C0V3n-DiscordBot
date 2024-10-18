@@ -1,4 +1,5 @@
 import { EmbedBuilder } from "discord.js";
+import EmbedColor from "../../util/enums/embedColor.js";
 import { getRandomScale } from "../../util/functions/music/getRandom.js";
 import type { Command } from "../../util/types/command.js";
 
@@ -12,10 +13,18 @@ export default {
 		try {
 			const scale = getRandomScale();
 
-			const embed = new EmbedBuilder().setTitle("Random Scale Generated!").addFields({
-				name: "Scale",
-				value: `${scale}`,
-			});
+			const embed = new EmbedBuilder()
+				.setTitle("Random Scale Generated!")
+				.addFields({
+					name: "Scale",
+					value: `${scale}`,
+				})
+				.setFooter({
+					text: "Requested by " + interaction.user.tag,
+					iconURL: interaction.user.displayAvatarURL(),
+				})
+				.setTimestamp()
+				.setColor(EmbedColor.blue);
 
 			await interaction.reply({ embeds: [embed] });
 		} catch (error) {
