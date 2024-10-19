@@ -1,4 +1,5 @@
 import { EmbedBuilder } from "discord.js";
+import { client } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import { getRandomScale } from "../../util/functions/music/getRandom.js";
 import type { Command } from "../../util/types/command.js";
@@ -24,7 +25,8 @@ export default {
 					iconURL: interaction.user.displayAvatarURL(),
 				})
 				.setTimestamp()
-				.setColor(EmbedColor.blue);
+				.setColor(EmbedColor.blue)
+				.setThumbnail(`${client.user?.displayAvatarURL()}`);
 
 			await interaction.reply({ embeds: [embed] });
 		} catch (error) {
