@@ -43,7 +43,13 @@ export default {
 			const embed = new EmbedBuilder()
 				.setTitle("Song of the Day")
 				.setDescription(`Song has been added to the queue.`)
-				.setColor(EmbedColor.green);
+				.setColor(EmbedColor.green)
+				.setFooter({
+					text: "Requested by " + interaction.user.tag,
+					iconURL: interaction.user.displayAvatarURL(),
+				})
+				.setTimestamp()
+				.setThumbnail(`${client.user?.displayAvatarURL()}`);
 
 			await interaction.reply({ embeds: [embed], ephemeral: true });
 		} catch (error) {
