@@ -4,7 +4,7 @@ import type { Command } from "../../util/types/command.js";
 
 export default {
 	data: {
-		name: "join_leave",
+		name: "setup_join_leave",
 		description: "Sets up or removes the welcome/leave system.",
 		dm_permission: false,
 		default_member_permissions: PermissionFlagsBits.Administrator.toString(),
@@ -80,6 +80,17 @@ export default {
 			const subSubCommand = interaction.options.getSubcommand();
 			const channel = interaction.options.getChannel("channel", true);
 			const message = interaction.options.getString("message", true);
+
+			const welcome = client.db.prepare("SELECT * FROM welcome WHERE channel_id = ?").get(channel.id);
+			const leave = client.db.prepare("SELECT * FROM leave WHERE channel_id = ?").get(channel.id);
+
+			if (welcome) {
+				client.db.prepare("DELETE FROM welcome WHERE channel_id = ?").run(channel.id);
+			}
+
+			if (leave) {
+				client.db.prepare("DELETE FROM leave WHERE channel_id = ?").run(channel.id);
+			}
 
 			switch (subCommand) {
 				case "welcome":

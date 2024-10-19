@@ -30,4 +30,12 @@ export default async function setupDBTables() {
             role_id TEXT
         );
     `);
+
+	client.db.exec(`
+        CREATE TABLE IF NOT EXISTS feedback (
+            user_id TEXT,
+            message TEXT
+            role_id TEXT
+        );
+    `);
 }
