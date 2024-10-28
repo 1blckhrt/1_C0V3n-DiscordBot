@@ -1,5 +1,6 @@
-import { ApplicationCommandOptionType, PermissionFlagsBits } from "discord.js";
+import { ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
 import { client } from "../../util/constants.js";
+import EmbedColor from "../../util/enums/embedColor.js";
 import type { Command } from "../../util/types/command.js";
 
 export default {
@@ -9,11 +10,6 @@ export default {
 		dm_permission: false,
 		default_member_permissions: PermissionFlagsBits.Administrator.toString(),
 		options: [
-			{
-				name: "channel",
-				description: "The channel to send the feedback messages in.",
-				type: ApplicationCommandOptionType.Channel,
-			},
 			{
 				name: "role",
 				description: "The role to ping when messages looking for feedback are sent.",
@@ -29,21 +25,19 @@ export default {
 	devOnly: false,
 	async execute({ interaction }) {
 		try {
-			const channel = interaction.options.getChannel("channel");
 			const role = interaction.options.getRole("role");
 			const message = interaction.options.getString("message");
 
-			const feedback = client.db.prepare("SELECT * FROM feedback WHERE channel_id = ?").get(channel?.id);
+			client.db.prepare("INSERT INTO feedback (role_id, message_text) VALUES (?, ?)").run(role?.id, message);
 
-			if (feedback) {
-				client.db.prepare("DELETE FROM feedback WHERE channel_id = ?").run(channel?.id);
-			}
+			const embed = new EmbedBuilder()
+				.setTitle("Feedback System Setup")
+				.setDescription(
+					`The role <@&${role?.id}> will be pinged when feedback is requested. The message is: ${message}`,
+				)
+				.setColor(EmbedColor.green);
 
-			client.db
-				.prepare("INSERT INTO feedback (channel_id, role_id, message) VALUES (?, ?, ?)")
-				.run(channel?.id, role?.id, message);
-
-			await interaction.reply(`Feedback has been set up in ${channel}.`);
+			await interaction.reply({ embeds: [embed], ephemeral: true });
 		} catch (error) {
 			console.error(error);
 		}
