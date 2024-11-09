@@ -1,8 +1,8 @@
-import { Events } from 'discord.js';
-import env from '../../env.json' assert { type: 'json' };
-import { client } from '../../util/constants.js';
-import notDev from '../../util/embeds/notDev.js';
-import type { Event } from '../../util/types/event.js';
+import { Events } from "discord.js";
+import env from "../../env.json" assert { type: "json" };
+import { client } from "../../util/constants.js";
+import notDev from "../../util/embeds/notDev.js";
+import type { Event } from "../../util/types/event.js";
 
 export default {
 	name: Events.InteractionCreate,

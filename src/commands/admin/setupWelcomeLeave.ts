@@ -4,7 +4,7 @@ import type { Command } from "../../util/types/command.js";
 
 export default {
 	data: {
-		name: "setup_join_leave",
+		name: "setup_greeting",
 		description: "Sets up or removes the welcome/leave system.",
 		dm_permission: false,
 		default_member_permissions: PermissionFlagsBits.Administrator.toString(),
@@ -12,127 +12,54 @@ export default {
 			{
 				name: "welcome",
 				description: "Sets up the welcome message.",
-				type: ApplicationCommandOptionType.SubcommandGroup,
+				type: ApplicationCommandOptionType.Subcommand,
 				options: [
 					{
-						name: "setup",
-						description: "Sets up the welcome message.",
-						type: ApplicationCommandOptionType.Subcommand,
-						options: [
-							{
-								name: "channel",
-								description: "The channel to send the welcome message in.",
-								type: ApplicationCommandOptionType.Channel,
-								required: true,
-							},
-							{
-								name: "message",
-								description: "The message to send.",
-								type: ApplicationCommandOptionType.String,
-								required: true,
-							},
-						],
-					},
-					{
-						name: "remove",
-						description: "Removes the welcome message.",
-						type: ApplicationCommandOptionType.Subcommand,
+						name: "channel",
+						description: "The channel to send the welcome message in.",
+						type: ApplicationCommandOptionType.Channel,
+						required: true,
 					},
 				],
 			},
 			{
 				name: "leave",
 				description: "Sets up the leave message.",
-				type: ApplicationCommandOptionType.SubcommandGroup,
+				type: ApplicationCommandOptionType.Subcommand,
 				options: [
 					{
-						name: "setup",
-						description: "Sets up the leave message.",
-						type: ApplicationCommandOptionType.Subcommand,
-						options: [
-							{
-								name: "channel",
-								description: "The channel to send the leave message in.",
-								type: ApplicationCommandOptionType.Channel,
-								required: true,
-							},
-							{
-								name: "message",
-								description: "The message to send.",
-								type: ApplicationCommandOptionType.String,
-								required: true,
-							},
-						],
-					},
-					{
-						name: "remove",
-						description: "Removes the leave message.",
-						type: ApplicationCommandOptionType.Subcommand,
+						name: "channel",
+						description: "The channel to send the leave message in.",
+						type: ApplicationCommandOptionType.Channel,
+						required: true,
 					},
 				],
 			},
 		],
 	},
+
 	devOnly: false,
 	async execute({ interaction }) {
 		try {
-			const subCommand = interaction.options.getSubcommandGroup(false);
-			const subSubCommand = interaction.options.getSubcommand();
+			const subCommand = interaction.options.getSubcommand();
 			const channel = interaction.options.getChannel("channel", true);
-			const message = interaction.options.getString("message", true);
-
-			const welcome = client.db.prepare("SELECT * FROM welcome WHERE channel_id = ?").get(channel.id);
-			const leave = client.db.prepare("SELECT * FROM leave WHERE channel_id = ?").get(channel.id);
-
-			if (welcome) {
-				client.db.prepare("DELETE FROM welcome WHERE channel_id = ?").run(channel.id);
-			}
-
-			if (leave) {
-				client.db.prepare("DELETE FROM leave WHERE channel_id = ?").run(channel.id);
-			}
 
 			switch (subCommand) {
 				case "welcome":
-					if (subSubCommand === "setup") {
-						client.db
-							.prepare("INSERT INTO welcome (channel_id, message) VALUES (?, ?)")
-							.run(channel.id, message);
-						await interaction.reply({
-							content: "Successfully set up the welcome message.",
-							ephemeral: true,
-						});
-					}
-
-					if (subSubCommand === "remove") {
-						client.db.prepare("DELETE FROM welcome WHERE channel_id = ?").run(channel.id);
-						await interaction.reply({
-							content: "Successfully removed the welcome message.",
-							ephemeral: true,
-						});
-					}
+					client.db.prepare(`INSERT INTO welcome (channel_id) VALUES (?)`).run(channel.id);
+					await interaction.reply({
+						content: "Successfully set up the welcome message.",
+						ephemeral: true,
+					});
 
 					break;
 
 				case "leave":
-					if (subSubCommand === "setup") {
-						client.db
-							.prepare("INSERT INTO leave (channel_id, message) VALUES (?, ?)")
-							.run(channel.id, message);
-						await interaction.reply({
-							content: "Successfully set up the leave message.",
-							ephemeral: true,
-						});
-					}
-
-					if (subSubCommand === "remove") {
-						const statement = client.db.prepare("DELETE FROM leave WHERE channel_id = ?");
-						statement.run(channel.id);
-						await interaction.reply({
-							content: "Successfully removed the leave message.",
-							ephemeral: true,
-						});
-					}
+					client.db.prepare("INSERT INTO leave (channel_id) VALUES (?)").run(channel.id);
+					await interaction.reply({
+						content: "Successfully set up the leave message.",
+						ephemeral: true,
+					});
 
 					break;
 

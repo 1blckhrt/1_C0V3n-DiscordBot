@@ -1,5 +1,5 @@
-import type { ChatInputCommandInteraction, RESTPostAPIApplicationCommandsJSONBody } from 'discord.js';
-import { z } from 'zod';
+import type { ChatInputCommandInteraction, RESTPostAPIApplicationCommandsJSONBody } from "discord.js";
+import { z } from "zod";
 
 export type CommandExecuteOptions = {
 	interaction: ChatInputCommandInteraction;

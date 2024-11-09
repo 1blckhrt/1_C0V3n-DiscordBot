@@ -28,7 +28,10 @@ export default {
 			const role = interaction.options.getRole("role");
 			const message = interaction.options.getString("message");
 
-			client.db.prepare("INSERT INTO feedback (role_id, message_text) VALUES (?, ?)").run(role?.id, message);
+			const results = client.db
+				.prepare("INSERT INTO feedback (role_id, message) VALUES (?, ?)")
+				.run(role?.id, message);
+			console.log(results);
 
 			const embed = new EmbedBuilder()
 				.setTitle("Feedback System Setup")

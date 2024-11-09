@@ -1,7 +1,7 @@
-import { readdir, stat } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
-import type { Predicate } from '../types/index.js';
+import { readdir, stat } from "node:fs/promises";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import type { Predicate } from "../types/index.js";
 
 export default async function loadStructures<Type>(path: string, predicate: Predicate<Type>): Promise<Type[]> {
 	const structures: Type[] = [];
@@ -19,7 +19,7 @@ export default async function loadStructures<Type>(path: string, predicate: Pred
 		const itemStats = await stat(itemPath);
 
 		if (itemStats.isDirectory()) {
-			const files = await readdir(itemPath).then((files) => files.filter((file) => file.endsWith('.js')));
+			const files = await readdir(itemPath).then((files) => files.filter((file) => file.endsWith(".js")));
 
 			for (const file of files) {
 				const filePath = join(itemPath, file);
@@ -33,7 +33,7 @@ export default async function loadStructures<Type>(path: string, predicate: Pred
 
 				structures.push(structure);
 			}
-		} else if (item.endsWith('.js')) {
+		} else if (item.endsWith(".js")) {
 			const fileURL = pathToFileURL(resolve(itemPath)).toString();
 			const structure = await import(fileURL).then((module) => module.default);
 

@@ -1,5 +1,5 @@
-import type { ClientEvents } from 'discord.js';
-import { z } from 'zod';
+import type { ClientEvents } from "discord.js";
+import { z } from "zod";
 
 export type Event<Name extends keyof ClientEvents = keyof ClientEvents> = {
 	execute(...parameters: ClientEvents[Name]): Promise<void> | void;

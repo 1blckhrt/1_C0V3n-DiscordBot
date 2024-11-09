@@ -7,7 +7,7 @@ import type { Event } from "../../util/types/event.js";
 export default {
 	name: Events.GuildMemberRemove,
 	async execute(member) {
-		const stmt = client.db.prepare("SELECT channel_id, message FROM leave");
+		const stmt = client.db.prepare(`SELECT channel_id, message FROM leave`);
 
 		const result = (await stmt.get()) as {
 			channel_id: string;

@@ -1,11 +1,11 @@
-import { EmbedBuilder } from 'discord.js';
-import EmbedColor from '../enums/embedColor.js';
+import { EmbedBuilder } from "discord.js";
+import EmbedColor from "../enums/embedColor.js";
 
 const embed = new EmbedBuilder()
-	.setTitle('❌ Error')
+	.setTitle("❌ Error")
 	.setFields({
-		name: 'Error',
-		value: 'This command is only available to developers.',
+		name: "Error",
+		value: "This command is only available to developers.",
 	})
 	.setColor(EmbedColor.red);
 

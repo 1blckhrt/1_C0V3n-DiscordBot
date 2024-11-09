@@ -1,14 +1,14 @@
-import type { ButtonInteraction, AnySelectMenuInteraction, ModalSubmitInteraction } from 'discord.js';
-import { z } from 'zod';
+import type { ButtonInteraction, AnySelectMenuInteraction, ModalSubmitInteraction } from "discord.js";
+import { z } from "zod";
 
-export type Component<Type extends 'Button' | 'Modal' | 'SelectMenu'> = {
+export type Component<Type extends "Button" | "Modal" | "SelectMenu"> = {
 	customId: string;
 	execute(
-		interaction: Type extends 'Button'
+		interaction: Type extends "Button"
 			? ButtonInteraction
-			: Type extends 'Modal'
+			: Type extends "Modal"
 				? ModalSubmitInteraction
-				: Type extends 'SelectMenu'
+				: Type extends "SelectMenu"
 					? AnySelectMenuInteraction
 					: never,
 	): Promise<void> | void;
@@ -20,7 +20,7 @@ export const componentSchema = z.object({
 	execute: z.function(),
 });
 
-export function isComponent<Type extends 'Button' | 'Modal' | 'SelectMenu'>(
+export function isComponent<Type extends "Button" | "Modal" | "SelectMenu">(
 	structure: unknown,
 ): structure is Component<Type> {
 	return componentSchema.safeParse(structure).success;

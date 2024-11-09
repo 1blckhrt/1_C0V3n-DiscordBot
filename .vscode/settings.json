@@ -10,5 +10,8 @@
 	"files.insertFinalNewline": true,
 	"files.eol": "\n",
 	"npm.packageManager": "pnpm",
-	"editor.fontFamily": "JetBrainsMono Nerd Font"
+	"editor.fontFamily": "JetBrainsMono Nerd Font",
+	"[sql]": {
+		"editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+	}
 }

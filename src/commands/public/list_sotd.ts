@@ -12,7 +12,7 @@ export default {
 	},
 	async execute({ interaction }) {
 		try {
-			const songs = client.db.prepare("SELECT * FROM sotd_queue").all();
+			const songs = client.db.prepare(`SELECT * FROM sotd_queue`).all();
 			if (!songs.length) {
 				const embed = new EmbedBuilder()
 					.setTitle("Song of the Day Queue")

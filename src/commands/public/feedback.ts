@@ -14,7 +14,7 @@ export default {
 	devOnly: false,
 	async execute({ interaction }) {
 		try {
-			const statement = client.db.prepare("SELECT * FROM feedback").get() as {
+			const statement = client.db.prepare(`SELECT * FROM feedback`).get() as {
 				message_text: string;
 				role_id: string;
 			};

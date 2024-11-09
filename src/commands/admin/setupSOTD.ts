@@ -35,12 +35,6 @@ export default {
 		const message = interaction.options.getString("message");
 		const role = interaction.options.getRole("role");
 
-		const sotd = client.db.prepare("SELECT * FROM sotd WHERE channel_id = ?").get(channel?.id);
-
-		if (sotd) {
-			client.db.prepare("DELETE FROM sotd WHERE channel_id = ?").run(channel?.id);
-		}
-
 		client.db
 			.prepare("INSERT INTO sotd (channel_id, message, role_id) VALUES (?, ?, ?)")
 			.run(channel?.id, message, role?.id);

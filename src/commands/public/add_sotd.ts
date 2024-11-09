@@ -36,7 +36,8 @@ export default {
 			const name = interaction.options.getString("name");
 			const artist = interaction.options.getString("artist");
 			const url = interaction.options.getString("url");
-			client.db.prepare("INSERT INTO sotd_queue (name, artist, url) VALUES (?, ?, ?)").run(name, artist, url);
+
+			client.db.prepare(`INSERT INTO sotd_queue (name, artist, url) VALUES (?, ?, ?)`).run(name, artist, url);
 
 			console.log(`${name} ${artist} ${url}`);
 

@@ -1,5 +1,5 @@
-import { Events } from 'discord.js';
-import type { Event } from '../../util/types/event.js';
+import { Events } from "discord.js";
+import type { Event } from "../../util/types/event.js";
 
 export default {
 	name: Events.InteractionCreate,
@@ -13,7 +13,9 @@ export default {
 					console.log(`${interaction.user.tag} (${interaction.user.id}) > button: ${interaction.customId}`);
 					break;
 				case interaction.isStringSelectMenu():
-					console.log(`${interaction.user.tag} (${interaction.user.id}) > selectMenu: ${interaction.customId}`);
+					console.log(
+						`${interaction.user.tag} (${interaction.user.id}) > selectMenu: ${interaction.customId}`,
+					);
 					break;
 				case interaction.isModalSubmit():
 					console.log(`${interaction.user.tag} (${interaction.user.id}) > modal: ${interaction.customId}`);
