@@ -14,11 +14,13 @@ export default {
 				name: "role",
 				description: "The role to ping when messages looking for feedback are sent.",
 				type: ApplicationCommandOptionType.Role,
+				required: true,
 			},
 			{
 				name: "message",
 				description: "The message to send.",
 				type: ApplicationCommandOptionType.String,
+				required: true,
 			},
 		],
 	},
@@ -28,10 +30,7 @@ export default {
 			const role = interaction.options.getRole("role");
 			const message = interaction.options.getString("message");
 
-			const results = client.db
-				.prepare("INSERT INTO feedback (role_id, message) VALUES (?, ?)")
-				.run(role?.id, message);
-			console.log(results);
+			client.db.prepare("INSERT INTO feedback (role_id, message) VALUES (?, ?)").run(role?.id, message);
 
 			const embed = new EmbedBuilder()
 				.setTitle("Feedback System Setup")

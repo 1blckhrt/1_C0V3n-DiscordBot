@@ -39,7 +39,7 @@ export class CustomClient extends Client {
 	}
 
 	public setupDB(): Database.Database {
-		const dbPath = path.join(__dirname, "../../src/database.db");
+		const dbPath = path.join(__dirname, "../../database.db");
 
 		return new Database(dbPath);
 	}

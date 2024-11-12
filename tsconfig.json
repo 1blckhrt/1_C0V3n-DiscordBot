@@ -9,5 +9,6 @@
 		"target": "ESNext",
 		"outDir": "dist",
 		"skipLibCheck": true
-	}
+	},
+	"include": ["src/**/*"]
 }

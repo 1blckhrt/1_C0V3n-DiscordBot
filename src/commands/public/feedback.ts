@@ -14,25 +14,31 @@ export default {
 	devOnly: false,
 	async execute({ interaction }) {
 		try {
-			const statement = client.db.prepare(`SELECT * FROM feedback`).get() as {
+			type Feedback = {
 				message_text: string;
 				role_id: string;
 			};
 
-			const message = statement.message_text;
-			const role = interaction.guild?.roles.cache.get(statement.role_id);
+			const feedbackDataList = client.db
+				.prepare("SELECT message AS message_text, role_id FROM feedback")
+				.all() as Feedback[];
+
+			if (feedbackDataList.length === 0) {
+				await interaction.reply({ content: "The feedback system has not been set up.", ephemeral: true });
+				return;
+			}
+
+			const feedbackData = feedbackDataList[0];
 
 			const errorEmbed = new EmbedBuilder()
 				.setTitle("Error")
-				.setDescription("The feedback system has not been set up, or you are not in the correct channel.")
+				.setDescription("You are not in the feedback channel!")
 				.setColor(EmbedColor.red);
-
-			console.log(interaction.channel?.id);
 
 			if (interaction.channel && env.feedbackChannel.includes(interaction.channel.id)) {
 				const embed = new EmbedBuilder()
 					.setTitle("Feedback Request")
-					.setDescription(`${message}`)
+					.setDescription(`${feedbackData.message_text}`)
 					.setColor(EmbedColor.green)
 					.setFooter({
 						text: "Requested by " + interaction.user.tag,
@@ -41,11 +47,7 @@ export default {
 					.setTimestamp()
 					.setThumbnail(`${client.user?.displayAvatarURL()}`);
 
-				if (role) {
-					await interaction.reply({ content: `<@&${role.id}>`, embeds: [embed] });
-				} else {
-					await interaction.reply({ content: "Role not found.", embeds: [embed] });
-				}
+				await interaction.reply({ content: `<@&${feedbackData.role_id}>`, embeds: [embed] });
 			} else {
 				await interaction.reply({ embeds: [errorEmbed] });
 			}

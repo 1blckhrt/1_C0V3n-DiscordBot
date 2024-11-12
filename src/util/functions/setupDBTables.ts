@@ -33,8 +33,7 @@ export default async function setupDBTables() {
 
 	client.db.exec(`
         CREATE TABLE IF NOT EXISTS feedback (
-            channel_id TEXT,
-            message_text TEXT,
+            message TEXT,
             role_id TEXT
         );
     `);
