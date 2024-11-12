@@ -1,5 +1,5 @@
-import { progressions } from "../../data/progressions.js";
-import { scales } from "../../data/scales.js";
+import { progressions } from "../../data/music/progressions.js";
+import { scales } from "../../data/music/scales.js";
 
 export function getRandomProgression(): string {
 	const randomIndex = Math.floor(Math.random() * progressions.length);

@@ -37,4 +37,11 @@ export default async function setupDBTables() {
             role_id TEXT
         );
     `);
+
+	client.db.exec(`
+        CREATE TABLE IF NOT EXISTS qotd (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            question TEXT NOT NULL,
+        );
+    `);
 }
