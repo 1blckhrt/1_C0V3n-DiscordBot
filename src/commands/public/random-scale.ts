@@ -1,4 +1,4 @@
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
 import { client } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import { getRandomScale } from "../../util/functions/music/getRandom.js";
@@ -8,6 +8,8 @@ export default {
 	data: {
 		name: "generate-random-scale",
 		description: "Generate a random scale.",
+		dm_permission: false,
+		default_member_permissions: PermissionFlagsBits.SendMessages.toString(),
 	},
 	devOnly: false,
 	async execute({ interaction }) {
