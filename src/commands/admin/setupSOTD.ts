@@ -31,19 +31,24 @@ export default {
 		],
 	},
 	async execute({ interaction }) {
-		const channel = interaction.options.getChannel("channel");
-		const message = interaction.options.getString("message");
-		const role = interaction.options.getRole("role");
+		try {
+			const channel = interaction.options.getChannel("channel");
+			const message = interaction.options.getString("message");
+			const role = interaction.options.getRole("role");
 
-		client.db
-			.prepare("INSERT INTO sotd (channel_id, message, role_id) VALUES (?, ?, ?)")
-			.run(channel?.id, message, role?.id);
+			client.db
+				.prepare("INSERT INTO sotd (channel_id, message, role_id) VALUES (?, ?, ?)")
+				.run(channel?.id, message, role?.id);
 
-		const embed = new EmbedBuilder()
-			.setTitle("Song of the Day")
-			.setDescription(`Song of the day has been set up in <#${channel?.id}>.`)
-			.setColor(EmbedColor.green);
+			const embed = new EmbedBuilder()
+				.setTitle("Song of the Day")
+				.setDescription(`Song of the day has been set up in <#${channel?.id}>.`)
+				.setColor(EmbedColor.green);
 
-		await interaction.reply({ embeds: [embed], ephemeral: true });
+			await interaction.reply({ embeds: [embed], ephemeral: true });
+		} catch (error) {
+			console.error(error);
+			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+		}
 	},
 } as const satisfies Command;

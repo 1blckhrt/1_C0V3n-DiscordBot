@@ -14,6 +14,7 @@ export default {
 			await interaction.reply("Pong!");
 		} catch (error) {
 			console.error(error);
+			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
 		}
 	},
 } as const satisfies Command;
