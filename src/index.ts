@@ -36,4 +36,3 @@ for (const component of components) {
 await client.login(env.token);
 client.setupDB();
 await setupDBTables();
-client.populateDB();

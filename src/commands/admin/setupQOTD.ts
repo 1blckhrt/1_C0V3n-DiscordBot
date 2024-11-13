@@ -6,7 +6,7 @@ import type { Command } from "../../util/types/command.js";
 export default {
 	data: {
 		name: "setup_qotd",
-		description: "Sets up/removes the question of the day system.",
+		description: "Sets up the question of the day system.",
 		dm_permission: false,
 		default_member_permissions: PermissionFlagsBits.Administrator.toString(),
 		options: [
@@ -18,7 +18,7 @@ export default {
 			},
 			{
 				name: "role",
-				description: "The role to ping when the song of the day is sent.",
+				description: "The role to ping when the question of the day is sent.",
 				type: ApplicationCommandOptionType.Role,
 				required: true,
 			},
