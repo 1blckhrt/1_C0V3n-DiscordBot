@@ -41,7 +41,7 @@ export default async function setupDBTables() {
 	client.db.exec(`
         CREATE TABLE IF NOT EXISTS qotd (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            question TEXT NOT NULL,
+            question TEXT NOT NULL
         );
     `);
 }

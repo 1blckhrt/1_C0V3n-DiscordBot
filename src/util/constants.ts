@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import Database from "better-sqlite3";
 import type { ClientOptions } from "discord.js";
 import { GatewayIntentBits, Client, Collection, Events } from "discord.js";
+import { populateDB } from "./functions/qotd/populateDB.js";
 import type { Command } from "./types/command.js";
 import type { Component } from "./types/component.js";
 
@@ -42,6 +43,10 @@ export class CustomClient extends Client {
 		const dbPath = path.join(__dirname, "../../database.db");
 
 		return new Database(dbPath);
+	}
+
+	public populateDB(): void {
+		populateDB(this);
 	}
 }
 
