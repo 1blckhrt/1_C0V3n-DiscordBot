@@ -38,7 +38,6 @@ export const questions: string[] = [
 	"How do you discover new music?",
 	"Do you prefer listening to music in a specific language, and why?",
 	"Do you prefer listening to music with or without lyrics?",
-	"Do you prefer listening to music with or without vocals?",
 	"What's your opinion on electronic music?",
 	"What's your opinion on classical music?",
 	"What's your opinion on jazz music?",

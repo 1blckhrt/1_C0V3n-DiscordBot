@@ -1,5 +1,6 @@
-import type { TextChannel } from "discord.js";
+import { EmbedBuilder, type TextChannel } from "discord.js";
 import type { CustomClient } from "../../constants.js";
+import EmbedColor from "../../enums/embedColor.js";
 import { deleteQuestion } from "./deleteQuestion.js";
 import { getRandomQuestion } from "./getRandom.js";
 
@@ -22,6 +23,15 @@ export async function sendAndDeleteQuestion(client: CustomClient): Promise<void>
 			console.log("No questions available in the database.");
 			return;
 		}
+
+		const embed = new EmbedBuilder()
+			.setTitle("Question of the Day")
+			.setDescription(question)
+			.setColor(EmbedColor.yellow)
+			.setTimestamp()
+			.setThumbnail(`${client.user?.displayAvatarURL()}`)
+			.setColor(EmbedColor.blue);
+		await qotdChannel.send({ embeds: [embed] });
 
 		console.log(`Sending question: ${question}`);
 		await qotdChannel.send(`Question of the Day: ${question}`);
