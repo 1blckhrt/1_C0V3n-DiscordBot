@@ -39,9 +39,16 @@ export default async function setupDBTables() {
     `);
 
 	client.db.exec(`
-        CREATE TABLE IF NOT EXISTS qotd (
+        CREATE TABLE IF NOT EXISTS qotd_queue (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             question TEXT NOT NULL
+        );
+    `);
+
+	client.db.exec(`
+        CREATE TABLE IF NOT EXISTS qotd (
+            channel_id TEXT,
+            role_id TEXT
         );
     `);
 }
