@@ -29,6 +29,16 @@ export default {
 			const channel = interaction.options.getChannel("channel");
 			const role = interaction.options.getRole("role");
 
+			const existing = client.db.prepare("SELECT * FROM qotd WHERE channel_id = ?").get(channel?.id);
+
+			if (existing) {
+				await interaction.reply({
+					content: "The question of the day system is already set up! Please remove it and try again!",
+					ephemeral: true,
+				});
+				return;
+			}
+
 			client.db.prepare("INSERT INTO qotd (channel_id, role_id) VALUES (?, ?)").run(channel?.id, role?.id);
 
 			const embed = new EmbedBuilder()

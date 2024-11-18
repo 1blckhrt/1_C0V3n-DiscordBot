@@ -36,6 +36,16 @@ export default {
 			const message = interaction.options.getString("message");
 			const role = interaction.options.getRole("role");
 
+			const existing = client.db.prepare("SELECT * FROM sotd WHERE channel_id = ?").get(channel?.id);
+
+			if (existing) {
+				await interaction.reply({
+					content: "The song of the day system is already set up! Please remove it and try again!",
+					ephemeral: true,
+				});
+				return;
+			}
+
 			client.db
 				.prepare("INSERT INTO sotd (channel_id, message, role_id) VALUES (?, ?, ?)")
 				.run(channel?.id, message, role?.id);

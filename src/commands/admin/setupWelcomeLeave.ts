@@ -44,6 +44,16 @@ export default {
 			const subCommand = interaction.options.getSubcommand();
 			const channel = interaction.options.getChannel("channel", true);
 
+			const existing = client.db.prepare(`SELECT * FROM ${subCommand} WHERE channel_id = ?`).get(channel.id);
+
+			if (existing) {
+				await interaction.reply({
+					content: `The ${subCommand} message is already set up! Please remove it and try again!`,
+					ephemeral: true,
+				});
+				return;
+			}
+
 			switch (subCommand) {
 				case "welcome":
 					client.db.prepare(`INSERT INTO welcome (channel_id) VALUES (?)`).run(channel.id);

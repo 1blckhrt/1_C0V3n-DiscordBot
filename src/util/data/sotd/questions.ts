@@ -77,4 +77,5 @@ export const questions: string[] = [
 	"Do you produce music, and why?",
 	"Who are some influential musicians that you look up to, and why?",
 	"Who are some inspirations for your music, and why?",
+	"Who's on your Spotify Wrapped/Apple Music Replay?",
 ];

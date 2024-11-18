@@ -30,6 +30,16 @@ export default {
 			const role = interaction.options.getRole("role");
 			const message = interaction.options.getString("message");
 
+			const existing = client.db.prepare("SELECT * FROM feedback WHERE role_id = ?").get(role?.id);
+
+			if (existing) {
+				await interaction.reply({
+					content: "The feedback system is already set up! Please remove it and try again!",
+					ephemeral: true,
+				});
+				return;
+			}
+
 			client.db.prepare("INSERT INTO feedback (role_id, message) VALUES (?, ?)").run(role?.id, message);
 
 			const embed = new EmbedBuilder()
@@ -42,7 +52,10 @@ export default {
 			await interaction.reply({ embeds: [embed], ephemeral: true });
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+			await interaction.reply({
+				content: "An error occurred while processing your request.",
+				ephemeral: true,
+			});
 		}
 	},
 } as const satisfies Command;
