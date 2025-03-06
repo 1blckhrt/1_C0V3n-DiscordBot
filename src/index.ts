@@ -1,8 +1,7 @@
+import process from "node:process";
 import { fileURLToPath, URL } from "node:url";
-import env from "./env.json" assert { type: "json" };
-import { client } from "./util/constants.js";
+import { env, client } from "./util/constants.js";
 import loadStructures from "./util/functions/loadStructures.js";
-import setupDBTables from "./util/functions/setupDBTables.js";
 import { isCommand, isEvent, isComponent } from "./util/types/index.js";
 
 const commands = await loadStructures(fileURLToPath(new URL("commands", import.meta.url)), isCommand);
@@ -34,5 +33,8 @@ for (const component of components) {
 }
 
 await client.login(env.token);
-client.setupDB();
-await setupDBTables();
+
+process.on("SIGINT", async () => {
+	await client.db.$disconnect();
+	process.exit(0);
+});

@@ -1,6 +1,5 @@
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
-import env from "../../env.json" assert { type: "json" };
-import { client } from "../../util/constants.js";
+import { EmbedBuilder, MessageFlags, PermissionFlagsBits } from "discord.js";
+import { client, config } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import type { Command } from "../../util/types/command.js";
 
@@ -19,12 +18,18 @@ export default {
 				role_id: string;
 			};
 
-			const feedbackDataList = client.db
-				.prepare("SELECT message AS message_text, role_id FROM feedback")
-				.all() as Feedback[];
+			const feedbackDataList = (await client.db.feedback.findMany({
+				select: {
+					message: true,
+					roleId: true,
+				},
+			})) as unknown as Feedback[];
 
 			if (feedbackDataList.length === 0) {
-				await interaction.reply({ content: "The feedback system has not been set up.", ephemeral: true });
+				await interaction.reply({
+					content: "The feedback system has not been set up.",
+					flags: MessageFlags.Ephemeral,
+				});
 				return;
 			}
 
@@ -35,7 +40,15 @@ export default {
 				.setDescription("You are not in the feedback channel!")
 				.setColor(EmbedColor.red);
 
-			if (interaction.channel && env.feedbackChannel.includes(interaction.channel.id)) {
+			if (!config.feedbackChannel) {
+				await interaction.reply({
+					content: "The feedback channel has not been set up.",
+					flags: MessageFlags.Ephemeral,
+				});
+				return;
+			}
+
+			if (interaction.channel && config.feedbackChannel.includes(interaction.channel.id)) {
 				const embed = new EmbedBuilder()
 					.setTitle("Feedback Request")
 					.setDescription(`${feedbackData.message_text}`)
@@ -53,7 +66,10 @@ export default {
 			}
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+			await interaction.reply({
+				content: "An error occurred while processing your request.",
+				flags: MessageFlags.Ephemeral,
+			});
 		}
 	},
 } as const satisfies Command;

@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import { ApplicationCommandOptionType, EmbedBuilder, MessageFlags, PermissionFlagsBits } from "discord.js";
 import { client } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import type { Command } from "../../util/types/command.js";
@@ -33,13 +33,17 @@ export default {
 	devOnly: false,
 	async execute({ interaction }) {
 		try {
-			const name = interaction.options.getString("name");
-			const artist = interaction.options.getString("artist");
-			const url = interaction.options.getString("url");
+			const name = interaction.options.getString("name")!;
+			const artist = interaction.options.getString("artist")!;
+			const url = interaction.options.getString("url")!;
 
-			client.db.prepare(`INSERT INTO sotd_queue (name, artist, url) VALUES (?, ?, ?)`).run(name, artist, url);
-
-			console.log(`${name} ${artist} ${url}`);
+			await client.db.sotdQueue.create({
+				data: {
+					name,
+					artist,
+					url,
+				},
+			});
 
 			const embed = new EmbedBuilder()
 				.setTitle("Song of the Day")
@@ -52,10 +56,13 @@ export default {
 				.setTimestamp()
 				.setThumbnail(`${client.user?.displayAvatarURL()}`);
 
-			await interaction.reply({ embeds: [embed], ephemeral: true });
+			await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+			await interaction.reply({
+				content: "An error occurred while processing your request.",
+				flags: MessageFlags.Ephemeral,
+			});
 		}
 	},
 } as const satisfies Command;

@@ -7,13 +7,14 @@ import type { Event } from "../../util/types/event.js";
 export default {
 	name: Events.GuildMemberRemove,
 	async execute(member) {
-		const stmt = client.db.prepare(`SELECT channel_id, message FROM leave`);
-
-		const result = (await stmt.get()) as {
-			channel_id: string;
-			message: string;
-		};
-		const channel = member.guild.channels.cache.get(result.channel_id) as TextChannel;
+		const result = await client.db.leave.findFirst({
+			select: {
+				channelId: true,
+				message: true,
+			},
+		});
+		if (!result) return;
+		const channel = member.guild.channels.cache.get(result.channelId) as TextChannel;
 
 		if (!channel) return;
 

@@ -7,13 +7,15 @@ import type { Event } from "../../util/types/event.js";
 export default {
 	name: Events.GuildMemberAdd,
 	async execute(member) {
-		const stmt = client.db.prepare("SELECT channel_id, message FROM welcome");
+		const result = await client.db.welcome.findFirst({
+			select: {
+				channelId: true,
+				message: true,
+			},
+		});
+		if (!result) return;
 
-		const result = (await stmt.get()) as {
-			channel_id: string;
-			message: string;
-		};
-		const channel = member.guild.channels.cache.get(result.channel_id) as TextChannel;
+		const channel = result.channelId ? (member.guild.channels.cache.get(result.channelId) as TextChannel) : null;
 
 		if (!channel) return;
 

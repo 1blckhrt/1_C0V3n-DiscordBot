@@ -1,4 +1,4 @@
-import { EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import { EmbedBuilder, MessageFlags, PermissionFlagsBits } from "discord.js";
 import { client } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import { getRandomScale } from "../../util/functions/music/getRandom.js";
@@ -33,7 +33,10 @@ export default {
 			await interaction.reply({ embeds: [embed] });
 		} catch (error) {
 			console.error(error);
-			await interaction.reply({ content: "An error occurred while processing your request.", ephemeral: true });
+			await interaction.reply({
+				content: "An error occurred while processing your request.",
+				flags: MessageFlags.Ephemeral,
+			});
 		}
 	},
 } as const satisfies Command;

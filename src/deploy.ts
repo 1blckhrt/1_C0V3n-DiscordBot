@@ -1,9 +1,13 @@
 import { fileURLToPath, URL } from "node:url";
 import { API } from "@discordjs/core";
 import { REST } from "discord.js";
-import env from "./env.json" assert { type: "json" };
+import { env } from "./util/constants.js";
 import loadStructures from "./util/functions/loadStructures.js";
 import { isCommand } from "./util/types/index.js";
+
+if (!env.token || !env.app_id) {
+	throw new Error("Missing environment variables!");
+}
 
 const rest = new REST().setToken(env.token);
 

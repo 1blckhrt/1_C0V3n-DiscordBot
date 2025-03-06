@@ -1,6 +1,11 @@
+# dependencies
 node_modules
+
+# production
 dist
 
-src/env.json
+# env
 .env
-database.db
+
+# prisma
+prisma/data/*

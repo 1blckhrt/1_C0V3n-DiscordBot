@@ -1,4 +1,13 @@
-import { ApplicationCommandOptionType, EmbedBuilder, PermissionFlagsBits } from "discord.js";
+import {
+	ActionRowBuilder,
+	ApplicationCommandOptionType,
+	ButtonBuilder,
+	ButtonStyle,
+	EmbedBuilder,
+	MessageFlags,
+	PermissionFlagsBits,
+	TextChannel,
+} from "discord.js";
 import { client } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import type { Command } from "../../util/types/command.js";
@@ -22,6 +31,12 @@ export default {
 				type: ApplicationCommandOptionType.String,
 				required: true,
 			},
+			{
+				name: "channel-button",
+				description: "The channel to send the button in.",
+				type: ApplicationCommandOptionType.Channel,
+				required: true,
+			},
 		],
 	},
 	devOnly: false,
@@ -30,31 +45,65 @@ export default {
 			const role = interaction.options.getRole("role");
 			const message = interaction.options.getString("message");
 
-			const existing = client.db.prepare("SELECT * FROM feedback WHERE role_id = ?").get(role?.id);
+			const existing = await client.db.feedback.findFirst({
+				where: {
+					roleId: role!.id,
+				},
+			});
 
 			if (existing) {
 				await interaction.reply({
 					content: "The feedback system is already set up! Please remove it and try again!",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 				return;
 			}
 
-			client.db.prepare("INSERT INTO feedback (role_id, message) VALUES (?, ?)").run(role?.id, message);
+			await client.db.feedback.create({
+				data: {
+					roleId: role!.id,
+					message: message!,
+				},
+			});
 
-			const embed = new EmbedBuilder()
-				.setTitle("Feedback System Setup")
-				.setDescription(
-					`The role <@&${role?.id}> will be pinged when feedback is requested. The message is: ${message}`,
-				)
-				.setColor(EmbedColor.green);
+			const button = new ButtonBuilder()
+				.setCustomId("feedback_role")
+				.setLabel("Feedback Role")
+				.setStyle(ButtonStyle.Primary);
+
+			const row = new ActionRowBuilder<ButtonBuilder>().addComponents(button);
+
+			const channel = interaction.options.getChannel("channel-button");
+
+			if (!channel) {
+				await interaction.reply({
+					content: "The specified channel was not found.",
+					flags: MessageFlags.Ephemeral,
+				});
+				return;
+			}
+
+			if (channel instanceof TextChannel) {
+				await channel.send({
+					content: message!,
+					components: [row],
+				});
+			} else {
+				await interaction.reply({
+					content: "The specified channel is not a text channel.",
+					flags: MessageFlags.Ephemeral,
+				});
+				return;
+			}
+
+			const embed = new EmbedBuilder().setTitle("Feedback System Setup").setColor(EmbedColor.green);
 
 			await interaction.reply({ embeds: [embed], ephemeral: true });
 		} catch (error) {
 			console.error(error);
 			await interaction.reply({
 				content: "An error occurred while processing your request.",
-				ephemeral: true,
+				flags: MessageFlags.Ephemeral,
 			});
 		}
 	},

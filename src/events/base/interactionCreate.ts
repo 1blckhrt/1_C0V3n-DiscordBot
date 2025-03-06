@@ -1,6 +1,5 @@
 import { Events } from "discord.js";
-import env from "../../env.json" assert { type: "json" };
-import { client } from "../../util/constants.js";
+import { config, client } from "../../util/constants.js";
 import notDev from "../../util/embeds/notDev.js";
 import type { Event } from "../../util/types/event.js";
 
@@ -11,7 +10,7 @@ export default {
 			if (interaction.isChatInputCommand()) {
 				const command = client.commands.get(interaction.commandName);
 
-				const isDeveloper = env.devIDs.includes(interaction.user.id);
+				const isDeveloper = config.devIDs.includes(interaction.user.id);
 
 				if (command?.devOnly && !isDeveloper) {
 					await interaction.reply({ embeds: [notDev], ephemeral: true });

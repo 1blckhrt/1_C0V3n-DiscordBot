@@ -1,5 +1,5 @@
-import { ApplicationCommandOptionType, EmbedBuilder, Events } from "discord.js";
-import { client, events } from "../../util/constants.js";
+import { ApplicationCommandOptionType, EmbedBuilder, Events, MessageFlags } from "discord.js";
+import { client, devEvents } from "../../util/constants.js";
 import EmbedColor from "../../util/enums/embedColor.js";
 import type { Command } from "../../util/types/command.js";
 
@@ -13,7 +13,7 @@ export default {
 				description: "The event to emit.",
 				type: ApplicationCommandOptionType.String,
 				required: true,
-				choices: Object.keys(events).map((emit) => ({
+				choices: Object.keys(devEvents).map((emit) => ({
 					name: emit,
 					value: emit,
 				})),
@@ -50,7 +50,7 @@ export default {
 				.setDescription(`The event \`${event}\` has been emitted!`)
 				.setColor(EmbedColor.green);
 
-			await interaction.reply({ embeds: [embed], ephemeral: true });
+			await interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
 		} catch (error) {
 			console.error(error);
 		}

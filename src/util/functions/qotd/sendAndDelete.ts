@@ -2,23 +2,25 @@ import { EmbedBuilder, type TextChannel } from "discord.js";
 import type { CustomClient } from "../../constants.js";
 import EmbedColor from "../../enums/embedColor.js";
 import { deleteQuestion } from "./deleteQuestion.js";
-import { getRandomQuestion } from "./getRandom.js";
+import { getRandomQuestion } from "./getRandomQuestion.js";
 
 export async function sendAndDeleteQuestion(client: CustomClient): Promise<void> {
 	try {
-		const result = client.db.prepare("SELECT channel_id FROM qotd").get() as { channel_id: string } | undefined;
-		if (!result?.channel_id) {
+		const result = await client.db.qotd.findFirst({
+			select: { channelId: true },
+		});
+		if (!result?.channelId) {
 			console.error("No QOTD channel set.");
 			return;
 		}
 
-		const qotdChannel = (await client.channels.fetch(result.channel_id)) as TextChannel | null;
+		const qotdChannel = (await client.channels.fetch(result.channelId)) as TextChannel | null;
 		if (!qotdChannel) {
 			console.error("QOTD channel not found.");
 			return;
 		}
 
-		const question = getRandomQuestion(client);
+		const question = await getRandomQuestion(client);
 		if (!question) {
 			console.log("No questions available in the database.");
 			return;
